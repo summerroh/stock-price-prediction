@@ -29,7 +29,10 @@ if not results:
     st.stop()
 
 model_names = list(results.keys())
-model = st.sidebar.selectbox("Select Model", model_names)
+# Reorder model names for dropdown
+preferred_order = ["CNN_new", "LSTM", "simple_hypergraph_model", "hypergraph_lstm"]
+ordered_model_names = [m for m in preferred_order if m in model_names] + [m for m in model_names if m not in preferred_order]
+model = st.sidebar.selectbox("Select Model", ordered_model_names)
 
 model_data = results[model]
 

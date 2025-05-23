@@ -3,3 +3,13 @@ CNN_new.py
 hypergraph_lstm.py
 LSTM.py
 simple hypergraph model.py
+
+Rebuild the Docker image:
+docker build -t stock_prediction-stock_prediction .
+
+Stop any running container using port 8501:
+ docker ps
+ docker stop <container_id>
+
+Run the dashboard again:
+docker run -p 8501:8501 stock_prediction-stock_prediction streamlit run dashboard.py

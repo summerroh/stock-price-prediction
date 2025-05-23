@@ -20,9 +20,13 @@ RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host files.pyt
 
 # Copy your notebook files
 COPY *.ipynb .
+# Copy dashboard and results files
+COPY dashboard.py .
+COPY all_model_results.json .
 
-# Expose port for Jupyter
+# Expose port for Jupyter and Streamlit
 EXPOSE 8888
+EXPOSE 8501
 
-# Start Jupyter notebook
+# Start Jupyter notebook by default (can override with docker run ...)
 CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
