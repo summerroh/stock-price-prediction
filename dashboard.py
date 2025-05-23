@@ -6,6 +6,7 @@ import plotly.express as px
 from datetime import datetime
 import json
 import os
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 # Set page configuration
 st.set_page_config(
@@ -65,6 +66,39 @@ rmse = np.sqrt(np.mean((df["Actual"] - df["Predicted"]) ** 2))
 st.write(f"**RMSE:** {rmse:.2f}")
 
 st.dataframe(df, use_container_width=True)
+
+# Show model structure image if available
+image_path = os.path.join("model_structures", f"{model}_structure.png")
+if os.path.exists(image_path):
+    st.image(image_path, caption=f"{model} Structure", use_column_width=True)
+else:
+    st.info("Model structure image not available.")
+
+# Calculate metrics for each model
+comparison_data = []
+for m in ordered_model_names:
+    m_data = results[m]
+    actual = np.array(m_data["actual_prices"])[:, ticker_idx]
+    predicted = np.array(m_data["predicted_prices"])[:, ticker_idx]
+    mse = mean_squared_error(actual, predicted)
+    rmse = np.sqrt(mse)
+    mae = mean_absolute_error(actual, predicted)
+    comparison_data.append({
+        "Model": m,
+        "MSE": mse,
+        "RMSE": rmse,
+        "MAE": mae
+    })
+
+comp_df = pd.DataFrame(comparison_data)
+
+# Melt the DataFrame for grouped bar chart
+comp_df_melted = comp_df.melt(id_vars=["Model"], value_vars=["MSE", "RMSE", "MAE"], var_name="Metric", value_name="Value")
+
+fig = px.bar(comp_df_melted, x="Model", y="Value", color="Metric", barmode="group", title="Model Comparison Metrics (Selected Ticker)")
+st.plotly_chart(fig, use_container_width=True)
+
+st.dataframe(comp_df, use_container_width=True)
 
 # Add a footer
 st.markdown("---")

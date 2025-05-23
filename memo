@@ -11,5 +11,8 @@ Stop any running container using port 8501:
  docker ps
  docker stop <container_id>
 
-Run the dashboard again:
+Run the dashboard:
 docker run -p 8501:8501 stock_prediction-stock_prediction streamlit run dashboard.py
+
+Running Docker shell in local terminal
+docker run -it --rm -v "${PWD}:/app" -w /app stock_prediction-stock_prediction bash

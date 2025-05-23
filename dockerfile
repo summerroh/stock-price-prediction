@@ -23,10 +23,14 @@ COPY *.ipynb .
 # Copy dashboard and results files
 COPY dashboard.py .
 COPY all_model_results.json .
+COPY model_structures model_structures
 
 # Expose port for Jupyter and Streamlit
 EXPOSE 8888
 EXPOSE 8501
 
 # Start Jupyter notebook by default (can override with docker run ...)
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+# CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+
+# Start Streamlit app
+# CMD ["streamlit", "run", "dashboard.py", "--server.address=0.0.0.0"]
